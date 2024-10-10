@@ -1,5 +1,6 @@
 const User = require('../model/model.user');
 const Admin = require('../model/model.admin');
+const Assignment = require('../model/model.assignment');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken'); 
 
@@ -29,19 +30,18 @@ const loginUser = async(req, res) => {
     if (!user) return res.status(400).json({ message: "User not found" });
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(400).json({ message: "Invalid credentials" });
-    const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET);
+    const token = jwt.sign({ id: user._id}, process.env.JWT_SECRET, {expiresIn: '1h'});
     res.json({ token });
 };
 
 const fetchAllAdmins = async(req, res) => {
-    const allAdmins = await Admin.find({});
+    const allAdmins = await Admin.find();
     res.status(201).json(allAdmins);
 };
 
 const uploadAssignment = async(req, res) => {
-    const { task, adminId } = req.body;
-    const userId = req.user.id;
-    const newAssignment = await Assignment.create({ userId, task, adminId });
+    const { task, adminId, userId } = req.body;
+    const newAssignment = await new Assignment({ userId : userId, task: task, adminId: adminId });
     res.status(201).json(newAssignment);
 };
 

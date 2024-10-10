@@ -1,4 +1,5 @@
 const Admin = require('../model/model.admin');
+const Assignment = require('../model/model.assignment');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
@@ -27,25 +28,30 @@ const loginAdmin = async(req, res) => {
     if (!admin) return res.status(400).json({ message: "Admin not found" });
     const isMatch = await bcrypt.compare(password, admin.password);
     if (!isMatch) return res.status(400).json({ message: "Invalid credentials" });
-    const token = jwt.sign({ id: admin._id, role: 'admin' }, process.env.JWT_SECRET);
+    const token = jwt.sign({ id: admin._id}, process.env.JWT_SECRET, {expiresIn: '1h'});
     res.json({ token });
 };
 
 const viewAssignments = async(req, res) => {
-    const adminId = req.user.id;
-    const assignments = await Assignment.find({ adminId });
+    console.log(req.user.id);
+    const admin = await Admin.findOne({_id: req.user.id});
+    console.log(admin["username"]);
+    const assignments = await Assignment.findOne({adminId: admin["username"]});
+    console.log(assignments);
     res.json(assignments);
 };
 
 const rejectAssignment = async(req, res) => {
     const { id } = req.params;
-    const assignment = await Assignment.findByIdAndUpdate(id, { status: 'rejected' }, { new: true });
+    const assignment = await Assignment.findOneAndUpdate({userId: id}, { status: 'rejected' });
+    const ass = await Assignment.find({userId: id});
+    console.log(ass);
     res.json(assignment);
 };
 
 const acceptAssignment = async(req, res) => {
     const { id } = req.params;
-    const assignment = await Assignment.findByIdAndUpdate(id, { status: 'accepted' }, { new: true });
+    const assignment = await Assignment.findOneAndUpdate({userId: id}, { status: 'accepted' });
     res.json(assignment);
 };
 
