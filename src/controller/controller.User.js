@@ -9,6 +9,7 @@ const registerUser = async(req, res) => {
     try{
 
         const {username, password} = req.body;
+        if(password.length < 8) throw new Error("Password less than 8 characters");
         let hashedPassword = await bcrypt.hash(password, 10);
         const user = await new User(
             {
