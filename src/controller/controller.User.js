@@ -44,8 +44,11 @@ const fetchAllAdmins = async(req, res) => {
 
 //to Upload an Assignment
 const uploadAssignment = async(req, res) => {
-    const { task, adminId, userId } = req.body;
-    const newAssignment = await new Assignment({ userId : userId, task: task, adminId: adminId });
+    const { task, adminId} = req.body;
+    const id = req.user.id;
+    const user = await User.findOne({_id: id});
+    const newAssignment = await new Assignment({ userId : user["username"], task: task, adminId: adminId });
+    newAssignment.save();
     res.status(201).json(newAssignment);
 };
 
