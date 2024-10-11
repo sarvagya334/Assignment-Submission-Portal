@@ -35,30 +35,21 @@ const loginAdmin = async(req, res) => {
 const viewAssignments = async(req, res) => {
     console.log(req.user.id);
     const admin = await Admin.find({_id: req.user.id});
-    console.log(admin[0]["username"]);
     const assignments = await Assignment.find({adminId: admin[0]["username"]});
-    console.log(assignments);
     res.json(assignments);
 };
 
 const rejectAssignment = async(req, res) => {
     const { id } = req.params;
-    const adminId = req.user.id;
-    const assignment = await Assignment.updateOne({_id: id, adminId : adminId}, {$set: {status: 'reject'}});
-    const ass = await Assignment.find({userId: id});
-    console.log(ass);
+    const makeChanges = await Assignment.updateOne({_id: id}, {$set:{status: 'reject'}});// find the assignment by _id then change its staus to accept
+    const assignment = await Assignment.findOne({_id: id});
     res.json(assignment);
 };
 
 const acceptAssignment = async(req, res) => {
     const { id } = req.params;
-    const adminId = req.user.id;
-    const admin = await  Admin.findOne({_id : adminId});
-    const adminUsername = admin["username"];
-    console.log(adminUsername);
     const makeChanges = await Assignment.updateOne({_id: id}, {$set:{status: 'accept'}});// find the assignment by _id then change its staus to accept
     const assignment = await Assignment.findOne({_id: id});
-    console.log(assignment);
     res.json(assignment);
 };
 
