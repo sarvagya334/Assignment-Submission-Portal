@@ -85,7 +85,7 @@ git clone https://github.com/sarvagya334/Assignment-Submission-Portal.git
 -go to project
 
 ```bash
-cd Assignment-Submission-Portal
+cd Assignment-Submission-Portal/src
 ```
 -download all dependencies(ths will install all necessary packages from package.json) 
 
@@ -94,7 +94,7 @@ npm i
 ```
 -run the app.js file
 ```bash
-node src/app.js
+node app.js
 ```
 **Now the application is running**
 
@@ -105,6 +105,8 @@ node src/app.js
 ```
 https://restless-spaceship-266238.postman.co/workspace/GrowthX-collection-access~da763bd3-efb0-4c2a-8b13-4267c0963cda/collection/37968638-d82ffcb4-d943-4b14-8935-aa7cea76087c?action=share&creator=37968638
 ```
+
+
 
 
 
