@@ -4,7 +4,7 @@ const Assignment = require('../model/model.assignment');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken'); 
 
-
+//User Registration
 const registerUser = async(req, res) => {
     try{
 
@@ -25,6 +25,7 @@ const registerUser = async(req, res) => {
     }
 }
 
+//User Login
 const loginUser = async(req, res) => {
     const { username, password } = req.body;
     const user = await User.findOne({ username });
@@ -35,11 +36,13 @@ const loginUser = async(req, res) => {
     res.json({ token });
 };
 
+//To see all the Admins
 const fetchAllAdmins = async(req, res) => {
     const allAdmins = await Admin.find();
     res.status(201).json(allAdmins);
 };
 
+//to Upload an Assignment
 const uploadAssignment = async(req, res) => {
     const { task, adminId, userId } = req.body;
     const newAssignment = await new Assignment({ userId : userId, task: task, adminId: adminId });

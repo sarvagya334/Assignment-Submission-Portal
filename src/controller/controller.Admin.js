@@ -3,6 +3,7 @@ const Assignment = require('../model/model.assignment');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
+//Admin Registration
 const registerAdmin = async(req, res) => {
     try{
 
@@ -22,6 +23,7 @@ const registerAdmin = async(req, res) => {
     }
 };
 
+//Admin Login
 const loginAdmin = async(req, res) => {
     const { username, password } = req.body;
     const admin = await Admin.findOne({ username });
@@ -32,13 +34,15 @@ const loginAdmin = async(req, res) => {
     res.json({ token });
 };
 
+//To view all Assignments
 const viewAssignments = async(req, res) => {
     console.log(req.user.id);
     const admin = await Admin.find({_id: req.user.id});
-    const assignments = await Assignment.find({adminId: admin[0]["username"]});
+    const assignments = await Assignment.find({adminId: admin[0]["username"]});//Query to find all the assignments
     res.json(assignments);
 };
 
+//Reject a Assignment
 const rejectAssignment = async(req, res) => {
     const { id } = req.params;
     const makeChanges = await Assignment.updateOne({_id: id}, {$set:{status: 'reject'}});// find the assignment by _id then change its staus to accept
@@ -46,6 +50,7 @@ const rejectAssignment = async(req, res) => {
     res.json(assignment);
 };
 
+//Accept a Assignment
 const acceptAssignment = async(req, res) => {
     const { id } = req.params;
     const makeChanges = await Assignment.updateOne({_id: id}, {$set:{status: 'accept'}});// find the assignment by _id then change its staus to accept
